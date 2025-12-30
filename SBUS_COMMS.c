@@ -8,7 +8,7 @@
 #define TAG "SBUS_COMMS"
 
 static uint8_t uartPort;
-QueueHandle_t queueNewSBUS;
+extern QueueHandle_t queueNewSBUS;  // TODO: traer por parametro en el init
 
 uint8_t rawToPercent(uint16_t value){
     return ((value - CHANNEL_MIN) *100.00) / (CHANNEL_MAX-CHANNEL_MIN);
@@ -32,7 +32,6 @@ static void receiveTask(void *pvParameters){
     uint8_t data[24],length = 0,lostPacketsCont = 0;
     channels_control_t newControl;
     int16_t channels[17];
-    queueNewSBUS = xQueueCreate(1,sizeof(channels_control_t));
 
     while(1){      
         uart_get_buffered_data_len(uartPort, (size_t*)&length);          // obtengo datos para leer
